@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  weather:
+    container_name: weather
+    build:
+      context: .
+      dockerfile: ./src/weather/Dockerfile
+    volumes:
+      - common_db:/db
+    ports:
+      - "5001:5001"
+    expose:
+      - "5001"
+  webserver:
+    container_name: webserver
+    build:
+      context: .
+      dockerfile: ./src/webserver/Dockerfile
+    volumes:
+      - common_db:/db
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    depends_on:
+      - worker
+  worker:
+    container_name: worker
+    build:
+      context: .
+      dockerfile: ./src/worker/Dockerfile
+    volumes:
+      - common_db:/db
+    ports:
+      - "5002:5002"
+    expose:
+      - "5002"
+    depends_on:
+      - weather
+
+volumes:
+  common_db:

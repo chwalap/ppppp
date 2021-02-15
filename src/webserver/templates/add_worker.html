@@ -1,0 +1,26 @@
+{{ define "menu-form" }}
+<form method="POST" action="/worker/new">
+    <section>
+        <div class="menu-form-left">
+            <label for="city">City</label>
+            <select id="city" name="city">
+                {{ range $k, $v := .Cities }}
+                <option value="{{ $k }}">{{ $v.Name }}</option>
+                {{end}}
+            </select>
+        </div>
+    
+        <div class="menu-form-left">
+            <label for="interval">Interval [sec]</label>
+            <input id="interval" value="60" name="interval" type="number" min="1" max="86400">
+        </div>
+        
+        <div class="menu-form-right">
+            <label for="send"></label>
+            <input id="send" type="submit" value="Create worker!">
+        </div>
+    
+        <br style="clear:both;"/>
+    </section>
+</form>
+{{ end }}

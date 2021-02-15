@@ -1,0 +1,10 @@
+{{ define "head" }}
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/ico" href="/resources/favicon.ico"/>
+    <link rel="stylesheet" href="/resources/styles.css">
+    {{ template "scripts" . }}
+
+    <title>{{ .Title }}</title>
+</head>
+{{ end }}

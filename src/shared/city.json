@@ -1,0 +1,252 @@
+[
+    {
+        "id": 3094802,
+        "name": "Kraków",
+        "state": "",
+        "country": "PL",
+        "coord": {
+            "lon": 19.91667,
+            "lat": 50.083328
+        }
+    },
+    {
+        "id": 538560,
+        "name": "Kursk",
+        "state": "",
+        "country": "RU",
+        "coord": {
+            "lon": 36.19389,
+            "lat": 51.730282
+        }
+    },
+    {
+        "id": 2878037,
+        "name": "Lichtenstein",
+        "state": "",
+        "country": "DE",
+        "coord": {
+            "lon": 12.65,
+            "lat": 50.75
+        }
+    },
+    {
+        "id": 993800,
+        "name": "Johannesburg",
+        "state": "",
+        "country": "ZA",
+        "coord": {
+            "lon": 28.043631,
+            "lat": -26.202271
+        }
+    },
+    {
+        "id": 3096328,
+        "name": "Kęty",
+        "state": "",
+        "country": "PL",
+        "coord": {
+            "lon": 19.22333,
+            "lat": 49.882141
+        }
+    },
+    {
+        "id": 4957962,
+        "name": "Belgrade",
+        "state": "ME",
+        "country": "US",
+        "coord": {
+            "lon": -69.83255,
+            "lat": 44.447289
+        }
+    },
+    {
+        "id": 3081368,
+        "name": "Wrocław",
+        "state": "",
+        "country": "PL",
+        "coord": {
+            "lon": 17.033331,
+            "lat": 51.099998
+        }
+    },
+    {
+        "id": 6554238,
+        "name": "Jerusalem",
+        "state": "",
+        "country": "DE",
+        "coord": {
+            "lon": 7.85,
+            "lat": 50.599998
+        }
+    },
+    {
+        "id": 2673722,
+        "name": "Stockholm",
+        "state": "",
+        "country": "SE",
+        "coord": {
+            "lon": 18.0,
+            "lat": 59.5
+        }
+    },
+    {
+        "id": 3090759,
+        "name": "Nowa Wieś",
+        "state": "",
+        "country": "PL",
+        "coord": {
+            "lon": 19.216459,
+            "lat": 49.907459
+        }
+    },
+    {
+        "id": 5475433,
+        "name": "Las Vegas",
+        "state": "NM",
+        "country": "US",
+        "coord": {
+            "lon": -105.2239,
+            "lat": 35.593929
+        }
+    },
+    {
+        "id": 4905599,
+        "name": "Pekin",
+        "state": "IL",
+        "country": "US",
+        "coord": {
+            "lon": -89.640663,
+            "lat": 40.567539
+        }
+    },
+    {
+        "id": 2267057,
+        "name": "Lisbon",
+        "state": "",
+        "country": "PT",
+        "coord": {
+            "lon": -9.13333,
+            "lat": 38.716671
+        }
+    },
+    {
+        "id": 4140963,
+        "name": "Washington, D.C.",
+        "state": "DC",
+        "country": "US",
+        "coord": {
+            "lon": -77.036369,
+            "lat": 38.895111
+        }
+    },
+    {
+        "id": 2147714,
+        "name": "Sydney",
+        "state": "",
+        "country": "AU",
+        "coord": {
+            "lon": 151.207321,
+            "lat": -33.867851
+        }
+    },
+    {
+        "id": 3117735,
+        "name": "Madrid",
+        "state": "",
+        "country": "ES",
+        "coord": {
+            "lon": -3.70256,
+            "lat": 40.4165
+        }
+    },
+    {
+        "id": 2950158,
+        "name": "Berlin",
+        "state": "",
+        "country": "DE",
+        "coord": {
+            "lon": 10.45,
+            "lat": 54.033329
+        }
+    },
+    {
+        "id": 2643743,
+        "name": "London",
+        "state": "",
+        "country": "GB",
+        "coord": {
+            "lon": -0.12574,
+            "lat": 51.50853
+        }
+    },
+    {
+        "id": 6695624,
+        "name": "Warszawa",
+        "state": "",
+        "country": "PL",
+        "coord": {
+            "lon": 21.04191,
+            "lat": 52.23547
+        }
+    },
+    {
+        "id": 6942553,
+        "name": "Paris",
+        "state": "",
+        "country": "CA",
+        "coord": {
+            "lon": -80.383331,
+            "lat": 43.200001
+        }
+    },
+    {
+        "id": 292223,
+        "name": "Dubai",
+        "state": "",
+        "country": "AE",
+        "coord": {
+            "lon": 55.304722,
+            "lat": 25.258169
+        }
+    },
+    {
+        "id": 5128581,
+        "name": "New York City",
+        "state": "NY",
+        "country": "US",
+        "coord": {
+            "lon": -74.005966,
+            "lat": 40.714272
+        }
+    },
+    {
+        "id": 524894,
+        "name": "Moscow",
+        "state": "",
+        "country": "RU",
+        "coord": {
+            "lon": 37.606667,
+            "lat": 55.761665
+        }
+    },
+    {
+        "id": 3067696,
+        "name": "Prague",
+        "state": "",
+        "country": "CZ",
+        "coord": {
+            "lon": 14.42076,
+            "lat": 50.088039
+        }
+    },
+    {
+        "id": 3083829,
+        "name": "Szczecin",
+        "state": "",
+        "country": "PL",
+        "coord": {
+            "lon": 14.55302,
+            "lat": 53.42894
+        }
+    }
+]

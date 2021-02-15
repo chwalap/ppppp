@@ -1,0 +1,67 @@
+<html>
+    {{ template "head" . }}
+    <body>
+        {{ template "menu" . }}
+        <div id="content">
+            <div>
+                <canvas id="weather-chart"></canvas>
+            </div>
+            <script>
+                const dateFormat = 'HH:mm:ss';
+                var ctx = document.getElementById('weather-chart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [ {{ range $s := .Stats }} moment(new Date( {{ $s.Timestamp }} * 1000)).format(dateFormat), {{ end }} ],
+                        datasets: [{
+                            label: 'Temperature in {{ .City }} [°C]',
+                            data: [ {{ range $s := .Stats }} {{ $s.Temperature }}, {{ end }} ],
+                            borderWidth: 1,
+                            borderColor: [
+                                'rgba(12, 222, 23, 0.5)',
+                            ],
+                            backgroundColor: [
+                                'rgba(12, 222, 23, 0.5)',
+                            ],
+                        }],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                suggestedMin: -5,
+                                suggestedMax: 5,
+                                gridLines: {
+                                    color: 'rgba(0, 0, 0, 0.3)',
+                                },
+                                ticks: {
+                                    color: '#bdbdbd',
+                                },
+                            },
+                            x: {
+                                gridLines: {
+                                    color: 'rgba(0, 0, 0, 0.3)',
+                                },
+                                ticks: {
+                                    color: '#bdbdbd',
+                                },
+                            },
+                        },
+                        elements: {
+                            point: {
+                                radius: 2,
+                                hoverRadius: 1,
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#bdbdbd',
+                                },
+                            },
+                        },
+                    },
+                });
+            </script>
+        </div>
+    </body>
+</html>
