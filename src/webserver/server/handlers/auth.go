@@ -23,6 +23,22 @@ func init() {
 	SessionManager.Cookie.Persist = false
 }
 
+type authContext struct {
+	Title     string
+	AuthTitle string
+	Action    string
+	Submit    string
+}
+
+func getLoginContext() authContext {
+	return authContext{
+		Title:     "Login",
+		AuthTitle: "Login",
+		Action:    "/login",
+		Submit:    "Login",
+	}
+}
+
 // LoginHandler handles login page
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if SessionManager.Exists(r.Context(), "userid") {
@@ -30,13 +46,17 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == "GET" {
-		t, err := template.ParseFiles("html/login.html")
-		if err != nil {
+		var err error
+		var t *template.Template
+
+		w.Header().Set("Content-Type", "text/html")
+		if t, err = template.ParseFiles(
+			"html/auth.html",
+			"html/head.html"); err != nil {
 			httperr(w, err, http.StatusInternalServerError)
 			return
 		}
-		w.Header().Set("Content-Type", "text/html")
-		t.Execute(w, nil)
+		t.Execute(w, getLoginContext())
 		return
 	}
 
@@ -83,6 +103,15 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
+func getSignupContext() authContext {
+	return authContext{
+		Title:     "Register",
+		AuthTitle: "Register",
+		Action:    "/signup",
+		Submit:    "Register",
+	}
+}
+
 // SignupHandler handles signup page
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	if SessionManager.Exists(r.Context(), "userid") {
@@ -90,13 +119,17 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == "GET" {
-		t, err := template.ParseFiles("html/signup.html")
-		if err != nil {
+		var err error
+		var t *template.Template
+
+		w.Header().Set("Content-Type", "text/html")
+		if t, err = template.ParseFiles(
+			"html/auth.html",
+			"html/head.html"); err != nil {
 			httperr(w, err, http.StatusInternalServerError)
 			return
 		}
-		w.Header().Set("Content-Type", "text/html")
-		t.Execute(w, nil)
+		t.Execute(w, getSignupContext())
 		return
 	}
 

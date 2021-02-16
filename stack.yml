@@ -1,0 +1,84 @@
+version: '3.9'
+
+services:
+  weather:
+    image: weather
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 60s
+    networks:
+      - net
+    ports:
+      - "5001:5001"
+    expose:
+      - "5001"
+    volumes:
+      - common_db:/db
+
+  webserver:
+    image: webserver
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 60s
+    depends_on:
+      - worker
+    networks:
+      - net
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    volumes:
+      - common_db:/db
+
+  worker:
+    image: worker
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 60s
+    depends_on:
+      - weather
+    networks:
+      - net
+    ports:
+      - "5002:5002"
+    expose:
+      - "5002"
+    volumes:
+      - common_db:/db
+
+volumes:
+  common_db:
+
+networks:
+  net:
+    external: true
+
+# swarm: docker stack deploy --compose-file docker-compose.yml ppppp

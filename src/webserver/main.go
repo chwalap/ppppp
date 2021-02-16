@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"shared"
 	"webserver/server"
 )
 
@@ -14,9 +13,6 @@ func main() {
 	var cwd string
 
 	if cwd, err = os.Getwd(); err != nil {
-		panic(err)
-	}
-	if err = shared.Db.CreateDbIfNotExists(false); err != nil {
 		panic(err)
 	}
 

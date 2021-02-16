@@ -1,0 +1,25 @@
+<html>
+    {{ define "scripts" }}{{ end }}
+    {{ template "head" . }}
+    <body>
+        <div id="auth-content">
+            <div id="auth-box">
+                <div id="auth-title">
+                    <span>{{ .AuthTitle }}</span>
+                </div>
+                <div id="auth-form">
+                    <form action="{{ .Action }}" method="post">
+                        <div>
+                            <label class="auth-label" for="userame">Username</label>
+                            <input class="auth-input" name="username">
+                            <label class="auth-label" for="password">Password</label>
+                            <input class="auth-input" name="password" type="password">
+                            <label class="auth-label" for="auth-form-submit"></label>
+                            <input class="auth-input" type="submit" id="auth-form-submit" value="{{ .Submit }}">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -66,7 +66,6 @@ func WorkersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if t, err = template.ParseFiles(
 		"html/workers.html",
-		"html/scripts.html",
 		"html/head.html",
 		"html/menu.html",
 		"html/add_worker.html"); err != nil {
@@ -226,7 +225,6 @@ func EditWorkerHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if t, err = template.ParseFiles(
 		"html/empty.html",
-		"html/scripts.html",
 		"html/head.html",
 		"html/menu.html",
 		"html/edit_worker.html"); err != nil {

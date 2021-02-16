@@ -16,6 +16,10 @@ import (
 func main() {
 	log.Printf("Weather service startup\n")
 
+	if err := shared.Db.CreateDbIfNotExists(true); err != nil {
+		panic(err)
+	}
+
 	weatherHandler := httptransport.NewServer(
 		service.MakeWeatherEndpoint(service.WeatherService{}),
 		decodeRequest,

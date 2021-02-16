@@ -1,0 +1,105 @@
+<html>
+    
+    
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/ico" href="/resources/favicon.ico"/>
+    <link rel="stylesheet" href="/resources/styles.css">
+    
+
+    <title>Edit Worker</title>
+</head>
+
+    <body>
+        
+<div id="menu">
+    <div id="title">Projekt programu pobierającego i prezentującego pogodę</div>
+    <div id="submenu">
+        <div id="menu-form">
+            
+<form method="POST" action="/worker/edit">
+    <section>
+        <input type="hidden" id="id" name="id" value="120">
+        <input type="hidden" id="running" name="running" value="1">
+        <div class="menu-form-left">
+            <label for="city">City</label>
+            <select id="city" name="city">
+                
+                <option value="292223" >Dubai</option>
+                
+                <option value="524894" >Moscow</option>
+                
+                <option value="538560" >Kursk</option>
+                
+                <option value="993800"  selected >Johannesburg</option>
+                
+                <option value="2147714" >Sydney</option>
+                
+                <option value="2267057" >Lisbon</option>
+                
+                <option value="2643743" >London</option>
+                
+                <option value="2673722" >Stockholm</option>
+                
+                <option value="2878037" >Lichtenstein</option>
+                
+                <option value="2950158" >Berlin</option>
+                
+                <option value="3067696" >Prague</option>
+                
+                <option value="3081368" >Wrocław</option>
+                
+                <option value="3083829" >Szczecin</option>
+                
+                <option value="3090759" >Nowa Wieś</option>
+                
+                <option value="3094802" >Kraków</option>
+                
+                <option value="3096328" >Kęty</option>
+                
+                <option value="3117735" >Madrid</option>
+                
+                <option value="4140963" >Washington, D.C.</option>
+                
+                <option value="4905599" >Pekin</option>
+                
+                <option value="4957962" >Belgrade</option>
+                
+                <option value="5128581" >New York City</option>
+                
+                <option value="5475433" >Las Vegas</option>
+                
+                <option value="6554238" >Jerusalem</option>
+                
+                <option value="6695624" >Warszawa</option>
+                
+                <option value="6942553" >Paris</option>
+                
+            </select>
+        </div>
+    
+        <div class="menu-form-left">
+            <label for="interval">Interval [sec]</label>
+            <input id="interval" name="interval" type="number" value="60"  min="1" max="86400">
+        </div>
+        
+        <div class="menu-form-right">
+            <label for="send"></label>
+            <input id="send" type="submit" value="Save">
+        </div>
+    
+        <br style="clear:both;"/>
+    </section>
+</form>
+
+        </div>
+        <div id="logout">
+            <form method="POST" action="/logout">
+                <input type="submit" id="logout-button" value="Logout">
+            </form>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

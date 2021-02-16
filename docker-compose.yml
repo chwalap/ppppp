@@ -1,43 +1,58 @@
-version: '3'
+version: '3.9'
 
 services:
   weather:
     container_name: weather
+    image: weather
     build:
       context: .
       dockerfile: ./src/weather/Dockerfile
-    volumes:
-      - common_db:/db
+    networks:
+      - net
     ports:
       - "5001:5001"
     expose:
       - "5001"
+    volumes:
+      - common_db:/db
+
   webserver:
     container_name: webserver
+    image: webserver
     build:
       context: .
       dockerfile: ./src/webserver/Dockerfile
-    volumes:
-      - common_db:/db
+    depends_on:
+      - worker
+    networks:
+      - net
     ports:
       - "8080:8080"
     expose:
       - "8080"
-    depends_on:
-      - worker
+    volumes:
+      - common_db:/db
+
   worker:
+    image: worker
     container_name: worker
     build:
       context: .
       dockerfile: ./src/worker/Dockerfile
-    volumes:
-      - common_db:/db
+    depends_on:
+      - weather
+    networks:
+      - net
     ports:
       - "5002:5002"
     expose:
       - "5002"
-    depends_on:
-      - weather
+    volumes:
+      - common_db:/db
 
 volumes:
   common_db:
+
+networks:
+  net:
+    external: true
