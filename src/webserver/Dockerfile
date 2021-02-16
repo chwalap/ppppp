@@ -3,6 +3,7 @@ COPY src/github.com /go/src/github.com
 COPY src/golang.org /go/src/golang.org
 COPY src/shared /go/src/shared
 COPY src/webserver /go/src/webserver
+RUN go get webserver
 RUN go build -o /go/bin/webserver webserver
 
 FROM golang:latest

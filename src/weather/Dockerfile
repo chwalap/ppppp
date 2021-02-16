@@ -3,6 +3,7 @@ COPY src/github.com /go/src/github.com
 COPY src/golang.org /go/src/golang.org
 COPY src/shared /go/src/shared
 COPY src/weather /go/src/weather
+RUN go get weather
 RUN go build -o /go/bin/weather weather
 
 FROM golang:latest
