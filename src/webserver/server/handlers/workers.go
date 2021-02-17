@@ -19,7 +19,8 @@ type workerContext struct {
 	Workers []shared.Worker
 }
 
-func getWorkerContext(user shared.User) (workerContext, error) {
+// GetAvailableCitiesForUser returns cities for which user can create worker
+func GetAvailableCitiesForUser(user shared.User) (map[int64]shared.City, error) {
 	workers, err := shared.Db.GetUserWorkers(user)
 	cities := map[int64]shared.City{}
 	for cityid := range Cities {
@@ -34,6 +35,12 @@ func getWorkerContext(user shared.User) (workerContext, error) {
 			cities[cityid] = Cities[cityid]
 		}
 	}
+	return cities, err
+}
+
+func getWorkerContext(user shared.User) (workerContext, error) {
+	workers, err := shared.Db.GetUserWorkers(user)
+	cities, err := GetAvailableCitiesForUser(user)
 	var w []shared.Worker
 	for _, v := range workers {
 		w = append(w, v)
@@ -172,9 +179,11 @@ type editContext struct {
 }
 
 func getEditContext(worker shared.Worker) editContext {
+	cities, _ := GetAvailableCitiesForUser(worker.User) // todo: add error handling
+	cities[worker.CityID] = worker.City
 	return editContext{
 		Title:    "Edit Worker",
-		Cities:   Cities,
+		Cities:   cities,
 		CityID:   worker.CityID,
 		ID:       worker.ID,
 		Interval: worker.Interval,

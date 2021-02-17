@@ -63,9 +63,6 @@ func getChartContext(worker shared.Worker, timestamp int64) (chartContext, error
 	if dateStart, dateEnd, err = shared.Db.GetGatheringStartEnd(worker); err != nil {
 		return context, err
 	}
-	if dateStart == 0 || dateEnd == 0 {
-		return context, fmt.Errorf("cannot get start and end dates")
-	}
 	context.Date = time.Now().Format(dateFormat)
 	context.MinDate = time.Unix(dateStart, 0).Format(dateFormat)
 	context.MaxDate = time.Unix(dateEnd, 0).Format(dateFormat)
@@ -93,6 +90,8 @@ func getChartContext(worker shared.Worker, timestamp int64) (chartContext, error
 		} else {
 			context.Stats = append(context.Stats, stats[len(stats)-1])
 		}
+	} else {
+		context.Stats = nil
 	}
 	return context, err
 }

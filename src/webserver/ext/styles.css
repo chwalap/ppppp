@@ -133,6 +133,11 @@ canvas#weather-chart {
     background-color: #3d3d3d;
 }
 
+#message {
+    padding: 30px;
+    font-size: 24;
+}
+
 #title {
     text-align: center;
     font-size: 30px;

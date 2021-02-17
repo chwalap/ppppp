@@ -3,6 +3,7 @@
     <body>
         {{ template "menu" . }}
         <div id="content">
+            {{ if .Stats }}
             <div>
                 <canvas id="weather-chart"></canvas>
             </div>
@@ -62,6 +63,8 @@
                     },
                 });
             </script>
+            {{ else }}
+            <span id="message">No data gathered yet.</span>
         </div>
     </body>
 </html>

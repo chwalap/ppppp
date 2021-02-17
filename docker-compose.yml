@@ -7,14 +7,14 @@ services:
     build:
       context: .
       dockerfile: ./src/weather/Dockerfile
-    networks:
-      - net
+    depends_on:
+      - builder
     ports:
       - "5001:5001"
     expose:
       - "5001"
     volumes:
-      - common_db:/db
+      - db:/db
 
   webserver:
     container_name: webserver
@@ -23,36 +23,37 @@ services:
       context: .
       dockerfile: ./src/webserver/Dockerfile
     depends_on:
+      - builder
       - worker
-    networks:
-      - net
     ports:
       - "8080:8080"
     expose:
       - "8080"
     volumes:
-      - common_db:/db
+      - db:/db
 
   worker:
-    image: worker
     container_name: worker
+    image: worker
     build:
       context: .
       dockerfile: ./src/worker/Dockerfile
     depends_on:
+      - builder
       - weather
-    networks:
-      - net
     ports:
       - "5002:5002"
     expose:
       - "5002"
     volumes:
-      - common_db:/db
+      - db:/db
+
+  # builder image; just for convinience
+  builder:
+    image: builder
+    build:
+      context: .
+      dockerfile: ./builder/Dockerfile
 
 volumes:
-  common_db:
-
-networks:
-  net:
-    external: true
+  db:

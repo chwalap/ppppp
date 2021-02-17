@@ -56,6 +56,7 @@ func logRequestHandler(h http.Handler) http.Handler {
 // NewHTTPServer creates new http multiplexer
 func NewHTTPServer(wd string) http.Handler {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/", handlers.RedirectHandler)
 	mux.HandleFunc("/cities", handlers.CitiesHandlers)             // shows all user's monitored cities and allows to show weather chart
 	mux.HandleFunc("/worker", handlers.WorkersHandler)             // shows all user's workers
 	mux.HandleFunc("/worker/new", handlers.AddWorkerHandler)       // adds new worker
@@ -65,9 +66,10 @@ func NewHTTPServer(wd string) http.Handler {
 	mux.HandleFunc("/worker/start", handlers.StartWorkerHandler)   // unpause worker
 	mux.HandleFunc("/worker/chart", handlers.ChartHandler)         // displays weather chart
 
-	mux.HandleFunc("/login", handlers.LoginHandler)   // login page
-	mux.HandleFunc("/logout", handlers.LogoutHandler) // logout page
-	mux.HandleFunc("/signup", handlers.SignupHandler) // signup page
+	mux.HandleFunc("/login", handlers.LoginHandler)              // login page
+	mux.HandleFunc("/logout", handlers.LogoutHandler)            // logout page
+	mux.HandleFunc("/signup", handlers.SignupHandler)            // signup page
+	mux.HandleFunc("/health-check", handlers.HealthCheckHandler) // signup page
 
 	// redirects resources
 	mux.HandleFunc("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir(wd+"/ext/"))).ServeHTTP)

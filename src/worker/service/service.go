@@ -329,5 +329,10 @@ func StartService() {
 	mux.HandleFunc("/worker/edit", editHandler)
 	mux.HandleFunc("/worker/pause", pauseHandler)
 	mux.HandleFunc("/worker/start", startHandler)
+	mux.HandleFunc("/health-check", healthCheck)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", shared.WorkerPort), mux))
+}
+
+func healthCheck(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }

@@ -16,7 +16,7 @@ import (
 func main() {
 	log.Printf("Weather service startup\n")
 
-	if err := shared.Db.CreateDbIfNotExists(true); err != nil {
+	if err := shared.Db.CreateDbIfNotExists(false); err != nil {
 		panic(err)
 	}
 
