@@ -1,6 +1,23 @@
 version: '3.9'
 
 services:
+  db:
+    image: db
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 10
+        window: 60s
+    networks:
+      - net
+    ports:
+      - "5003:5003"
+    volumes:
+      - db:/db
+
   weather:
     image: weather
     deploy:
@@ -58,6 +75,7 @@ services:
 
 volumes:
   db:
-
+  
 networks:
   net:
+    driver: overlay

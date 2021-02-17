@@ -31,11 +31,6 @@ func init() {
 	M = &sync.RWMutex{}
 }
 
-func httperr(w http.ResponseWriter, err error, status int) {
-	w.WriteHeader(status)
-	w.Write([]byte(err.Error()))
-}
-
 func getWorkerFromRequest(r *http.Request) (shared.Worker, error) {
 	var err error
 	var body []byte
@@ -65,7 +60,7 @@ func respondSuccess(w http.ResponseWriter) error {
 
 func addHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		httperr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
 		return
 	}
 
@@ -73,23 +68,23 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	var worker shared.Worker
 
 	if worker, err = getWorkerFromRequest(r); err != nil {
-		httperr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
 		return
 	}
 	if worker.Interval < 1 || worker.Interval > 86400 {
-		httperr(w, fmt.Errorf("interval must be in range <1; 86400>, but is %d", worker.Interval), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("interval must be in range <1; 86400>, but is %d", worker.Interval), http.StatusBadRequest)
 		return
 	}
 	if _, err = shared.Db.AddCity(C[worker.CityID]); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if worker.ID, err = shared.Db.AddWorker(worker); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(worker.ID); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -106,7 +101,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		httperr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
 		return
 	}
 
@@ -114,7 +109,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	var worker shared.Worker
 
 	if worker, err = getWorkerFromRequest(r); err != nil {
-		httperr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
 		return
 	}
 
@@ -127,11 +122,11 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err = shared.Db.DeleteWorkerData(worker); err != nil {
 		M.Unlock()
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = shared.Db.DeleteWorker(worker.ID); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -142,7 +137,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 
 func editHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		httperr(w, fmt.Errorf("bad request method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request method"), http.StatusBadRequest)
 		return
 	}
 
@@ -150,23 +145,23 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	var worker shared.Worker
 
 	if worker, err = getWorkerFromRequest(r); err != nil {
-		httperr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request"), http.StatusBadRequest)
 		return
 	}
 	if worker.Interval < 1 || worker.Interval > 86400 {
-		httperr(w, fmt.Errorf("interval must be in range <1; 86400>, but is %d", worker.Interval), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("interval must be in range <1; 86400>, but is %d", worker.Interval), http.StatusBadRequest)
 		return
 	}
 	if _, err = shared.Db.AddCity(C[worker.CityID]); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = shared.Db.UpdateWorker(worker); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(worker.ID); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -176,7 +171,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	if worker.CityID != W[worker.ID].CityID {
 		if err = shared.Db.DeleteWorkerData(W[worker.ID]); err != nil {
 			M.Unlock()
-			httperr(w, err, http.StatusInternalServerError)
+			shared.HTTPerr(w, err, http.StatusInternalServerError)
 			return
 		}
 	}
@@ -193,7 +188,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 func pauseHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		httperr(w, fmt.Errorf("bad request method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request method"), http.StatusBadRequest)
 		return
 	}
 
@@ -201,20 +196,20 @@ func pauseHandler(w http.ResponseWriter, r *http.Request) {
 	var worker shared.Worker
 
 	if worker, err = getWorkerFromRequest(r); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	if W[worker.ID].Running == 0 {
-		httperr(w, fmt.Errorf("worker is not running"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("worker is not running"), http.StatusBadRequest)
 		return
 	}
 	worker.Running = 0
 	if err = shared.Db.UpdateWorker(worker); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(worker.ID); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -230,7 +225,7 @@ func pauseHandler(w http.ResponseWriter, r *http.Request) {
 
 func startHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		httperr(w, fmt.Errorf("bad request method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad request method"), http.StatusBadRequest)
 		return
 	}
 
@@ -238,20 +233,20 @@ func startHandler(w http.ResponseWriter, r *http.Request) {
 	var worker shared.Worker
 
 	if worker, err = getWorkerFromRequest(r); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	if W[worker.ID].Running == 1 {
-		httperr(w, fmt.Errorf("worker is already running"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("worker is already running"), http.StatusBadRequest)
 		return
 	}
 	worker.Running = 1
 	if err = shared.Db.UpdateWorker(worker); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(worker.ID); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -286,11 +281,10 @@ func Worker(w shared.Worker) {
 		select {
 		case <-ticker.C:
 			{
-				if status, err = weather.GetWeather(city.ID); err != nil {
+				if status, err = weather.GetWeather(w); err != nil {
 					log.Printf("Worker #%d error: { %s }\n", id, err.Error())
 					continue
 				}
-				status.WorkerID = id
 				if statusid, err = shared.Db.AddWeatherStatus(status); err != nil {
 					log.Printf("Worker #%d error: %s\n", id, err.Error())
 					continue

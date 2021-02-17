@@ -5,10 +5,11 @@
         <div id="auth-content">
             <div id="auth-box">
                 <div id="auth-title">
-                    <span>{{ .AuthTitle }}</span>
+                    <div>{{ .AuthTitle }}</div>
+                    <div id="auth-error">{{ .Error  }}</div>
                 </div>
-                <div id="auth-form">
-                    <form action="{{ .Action }}" method="post">
+                <div id="auth-form-container">
+                    <form id="auth-form" action="{{ .Action }}" method="post">
                         <div>
                             <label class="auth-label" for="userame">Username</label>
                             <input class="auth-input" name="username">

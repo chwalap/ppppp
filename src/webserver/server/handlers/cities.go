@@ -26,7 +26,7 @@ func CitiesHandlers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "GET" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
 }

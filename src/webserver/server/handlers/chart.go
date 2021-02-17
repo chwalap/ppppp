@@ -103,7 +103,7 @@ func ChartHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != "GET" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
 
@@ -114,16 +114,16 @@ func ChartHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	if worker, timestamp, err = getURLParameters(r); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	userid := SessionManager.Get(r.Context(), "userid").(int64)
 	if worker.UserID != userid {
-		httperr(w, fmt.Errorf("worker does not belong to user"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("worker does not belong to user"), http.StatusBadRequest)
 		return
 	}
 	if context, err = getChartContext(worker, timestamp); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -133,11 +133,11 @@ func ChartHandler(w http.ResponseWriter, r *http.Request) {
 		"html/date.html",
 		"html/menu.html",
 		"html/head.html"); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = t.Execute(w, context); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 }

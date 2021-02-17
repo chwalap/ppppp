@@ -146,6 +146,23 @@ func (d *Database) GetUserByName(username string) (User, error) {
 	return user, err
 }
 
+// DoesUserExists check whether user alrady exists
+func (d *Database) DoesUserExists(username string) (bool, error) {
+	var exists bool = false
+	var result int = 0
+	var err error
+	if rows, err := d.Query(fmt.Sprintf(`SELECT EXISTS( SELECT 1 FROM users WHERE username='%s' )`, username)); err == nil {
+		defer rows.Close()
+		if rows.Next() {
+			err = rows.Scan(&result)
+			if result == 1 {
+				exists = true
+			}
+		}
+	}
+	return exists, err
+}
+
 // Worker defines worker in db
 type Worker struct {
 	ID       int64         `json:"id" db:"id"`

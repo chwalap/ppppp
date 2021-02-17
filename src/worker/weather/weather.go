@@ -11,7 +11,7 @@ import (
 )
 
 // GetWeather returns weather from another microservice
-func GetWeather(cityid int64) (shared.WeatherStatus, error) {
+func GetWeather(worker shared.Worker) (shared.WeatherStatus, error) {
 	var result shared.WeatherResponse
 	var request *http.Request
 	var response *http.Response
@@ -21,7 +21,7 @@ func GetWeather(cityid int64) (shared.WeatherStatus, error) {
 	var err error
 
 	// prepare request
-	if jsonStr, err = json.Marshal(shared.WeatherRequest{CityID: cityid}); err != nil {
+	if jsonStr, err = json.Marshal(shared.WeatherRequest{CityID: worker.CityID, WorkerID: worker.ID}); err != nil {
 		return status, err
 	}
 	if request, err = http.NewRequest("POST", shared.WeatherEndpoint, bytes.NewBuffer(jsonStr)); err != nil {

@@ -19,3 +19,6 @@ src/github.com
 src/golang.org
 bin
 pkg
+
+gatling/results
+gatling/target

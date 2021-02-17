@@ -1,17 +1,15 @@
-{{ define "menu-form" }}
-<div>
-    <div id="go-back" class="menu-form-left">
-        <a href="/worker">
-            <button id="back">Back</button>
-        </a>
+{{ define "menu-left" }}
+    <div id="menu-left">
+        <div style="padding: 10px; display: inline-block;">
+            <a href="/worker">
+                <button class="menu-button">Back</button>
+            </a>
+            <form id="date-form" method="GET" action="/worker/chart">
+                <input type="hidden" id="id" name="id" value="{{ .ID }}">
+                <label for="date">Date: </label>
+                <input type="date" id="date" name="date" value="{{ .Date }}" min="{{ .MinDate }}" max="{{ .MaxDate }}" required>
+                <input id="show" type="submit" value="Show">
+            </form>
+        </div>
     </div>
-    <div class="menu-form-left">
-        <form method="GET" action="/worker/chart">
-            <input type="hidden" id="id" name="id" value="{{ .ID }}">
-            <label for="date">Date: </label>
-            <input type="date" id="date" name="date" value="{{ .Date }}" min="{{ .MinDate }}" max="{{ .MaxDate }}" required>
-            <input id="show" type="submit" value="Show">
-        </form>
-    </div>
-</div>
 {{ end }}

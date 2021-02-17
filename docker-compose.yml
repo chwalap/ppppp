@@ -1,36 +1,95 @@
 version: '3.9'
 
 services:
+  builder:
+    image: builder
+    build:
+      context: .
+      dockerfile: builder/Dockerfile
+      cache_from:
+        - golang:alpine
+        - builder
+
+  db:
+    container_name: db
+    image: db
+    build:
+      context: .
+      dockerfile: src/db/Dockerfile
+      cache_from:
+        - alpine:latest
+        - builder
+        - db
+    depends_on:
+      - builder
+    networks:
+      - net
+    ports:
+      - "5003:5003"
+    expose:
+      - "5003"
+    volumes:
+      - db:/db
+    healthcheck:
+      test: curl -f https://localhost:5003/health-check || exit 1
+      interval: 5m
+      timeout: 12s
+      retries: 5
+      start_period: 20s
+
   weather:
     container_name: weather
     image: weather
     build:
       context: .
-      dockerfile: ./src/weather/Dockerfile
+      dockerfile: src/weather/Dockerfile
+      cache_from:
+        - alpine:latest
+        - builder
+        - weather
     depends_on:
       - builder
+    networks:
+      - net
     ports:
       - "5001:5001"
     expose:
       - "5001"
     volumes:
       - db:/db
+    healthcheck:
+      test: curl -f https://localhost:5001/health-check || exit 1
+      interval: 5m
+      timeout: 12s
+      retries: 5
+      start_period: 20s
 
   webserver:
     container_name: webserver
     image: webserver
     build:
       context: .
-      dockerfile: ./src/webserver/Dockerfile
+      dockerfile: src/webserver/Dockerfile
+      cache_from:
+        - alpine:latest
+        - builder
+        - webserver
     depends_on:
       - builder
-      - worker
+    networks:
+      - net
     ports:
       - "8080:8080"
     expose:
       - "8080"
     volumes:
       - db:/db
+    healthcheck:
+      test: curl -f https://localhost:8080/health-check || exit 1
+      interval: 5m
+      timeout: 12s
+      retries: 5
+      start_period: 20s
 
   worker:
     container_name: worker
@@ -38,22 +97,30 @@ services:
     build:
       context: .
       dockerfile: ./src/worker/Dockerfile
+      cache_from:
+        - alpine:latest
+        - builder
+        - worker
     depends_on:
       - builder
-      - weather
+    networks:
+      - net
     ports:
       - "5002:5002"
     expose:
       - "5002"
     volumes:
       - db:/db
-
-  # builder image; just for convinience
-  builder:
-    image: builder
-    build:
-      context: .
-      dockerfile: ./builder/Dockerfile
+    healthcheck:
+      test: curl -f https://localhost:5002/health-check || exit 1
+      interval: 5m
+      timeout: 12s
+      retries: 5
+      start_period: 20s
 
 volumes:
   db:
+  
+networks:
+  net:
+    driver: overlay

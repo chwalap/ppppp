@@ -4,6 +4,7 @@ body {
 }
 
 input, select, option, button {
+    display: inline-block;
     border: 1px solid #1b1b1b;
     color: #a2a6ac !important;
     text-decoration: none;
@@ -29,15 +30,26 @@ input:hover, select:hover, option:hover, button:hover {
     border: 3px solid #191919;
     text-align: center;
     width: 40%;
+    height: 80%;
     margin: auto auto;
     padding: 35px;
 }
 
+#auth-error {
+    display: block;
+    color: #9c2828;
+    font-size: 18;
+    padding-top: 30px;
+    font-weight: bolder;
+}
+
 #auth-form-submit {
     font-size: 25;
+    background-color: #252525;
 }
 
 #auth-title {
+    height: 20%;
     font-size: 60;
     color: #818181;
     font-weight: bold;
@@ -46,8 +58,13 @@ input:hover, select:hover, option:hover, button:hover {
     border-bottom: 2px solid #1b1b1b;
 }
 
-#auth-form {
+#auth-form-container {
     text-align: left;
+}
+
+#auth-form {
+    display: block;
+    height: auto;
 }
 
 .auth-input {
@@ -67,7 +84,13 @@ input:hover, select:hover, option:hover, button:hover {
     height: auto;
     margin: 0;
     padding: 20px 10px 10px !important;
+}
 
+form {
+    margin:  0;
+    padding: 0;
+    display: inline-block;
+    height: 100%;
 }
 
 label {
@@ -75,7 +98,7 @@ label {
     margin-left: 15px;
 }
 
-input[type=submit], select, option {
+input[type=submit], select, button, option {
     padding: 15px;
 }
 
@@ -92,20 +115,6 @@ input[type=date] {
     margin-left: -5px;
 }
 
-#go-back {
-    padding-left: 10px;
-    margin-right: 40px;
-}
-
-#back {
-    padding: 15px;
-}
-
-#back svg {
-    width: 16px;
-    height: 16px;
-}
-
 #logout {
     float: right;
     padding-right: 10px;
@@ -115,14 +124,13 @@ input[type=date] {
     display: block;
     margin: auto;
     width: 60%;
-    height: auto;
-    padding: 0 30px;
+    height: fit-content;
 }
 
 #submenu {
-    padding-top: 20px;
+    width: 100%;
+    height: 100%;
     border: 2px solid #1b1b1b;
-    height: 80px;
 }
 
 #weather-chart {
@@ -134,14 +142,17 @@ canvas#weather-chart {
 }
 
 #message {
+    width: 100%;
     padding: 30px;
     font-size: 24;
+    float: left;
 }
 
 #title {
     text-align: center;
     font-size: 30px;
-    padding: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 
 #content {
@@ -156,8 +167,21 @@ canvas#weather-chart {
     text-align: center;
 }
 
-#menu-form {
+#menu-left {
+    width: fit-content;
+    height: inherit;
     float: left;
+    padding:  15px;
+}
+
+#menu-right {
+    height: auto;
+    float: right;
+    /* margin: 15px; */
+    /* width: 50%; */
+    height: inherit;
+    /* float: left; */
+    padding: 15px;
 }
 
 a {
@@ -238,13 +262,4 @@ table {
 
 thead {
     text-align: left;
-}
-
-.menu-form-left {
-    float:left;
-    margin-right:10px;
-}
-
-.menu-form-right {
-    float: right;
 }

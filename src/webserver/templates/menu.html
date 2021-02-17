@@ -2,14 +2,15 @@
 <div id="menu">
     <div id="title">Projekt programu pobierającego i prezentującego pogodę</div>
     <div id="submenu">
-        <div id="menu-form">
-            {{ template "menu-form" . }}
+        {{ template "menu-left" . }}
+        <div id="menu-right">
+            <div style="padding: 10px; display: inline-block;">
+                <a href="/logout">
+                    <button class="menu-button">Logout</button>
+                </a>
+            </div>
         </div>
-        <div id="logout">
-            <form method="POST" action="/logout">
-                <input type="submit" id="logout-button" value="Logout">
-            </form>
-        </div>
+        <div style="clear: both;"></div>
     </div>
 </div>
 {{end}}

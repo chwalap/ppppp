@@ -1,5 +1,5 @@
-FROM alpine:latest
-COPY --from=builder /go/bin/worker /opt/ppppp/bin/worker
-COPY --from=builder /go/src/shared/city.json /db/cities.json
+FROM alpine:latest AS worker
 WORKDIR /opt/ppppp/
-CMD ["/opt/ppppp/bin/worker"]
+COPY src/shared/city.json /db/cities.json
+COPY --from=builder /go/bin/worker /opt/ppppp/bin/worker
+CMD /opt/ppppp/bin/worker

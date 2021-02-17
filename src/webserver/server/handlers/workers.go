@@ -61,7 +61,7 @@ func WorkersHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != "GET" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
 
@@ -76,21 +76,21 @@ func WorkersHandler(w http.ResponseWriter, r *http.Request) {
 		"html/head.html",
 		"html/menu.html",
 		"html/add_worker.html"); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	userid := SessionManager.Get(r.Context(), "userid").(int64)
 	if user, err = shared.Db.GetUserByID(userid); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if context, err = getWorkerContext(user); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = t.Execute(w, context); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -102,7 +102,7 @@ func AddWorkerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != "POST" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
 
@@ -115,11 +115,11 @@ func AddWorkerHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("userid: %d\n", userid)
 
 	if cityid, err = strconv.ParseInt(r.PostFormValue("city"), 10, 0); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	if interval, err = strconv.ParseInt(r.PostFormValue("interval"), 10, 0); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -131,7 +131,7 @@ func AddWorkerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err = sendWorkerRequest(worker, "add"); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/worker", http.StatusSeeOther)
@@ -145,7 +145,7 @@ func DeleteWorkerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != "GET" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
 
@@ -154,15 +154,15 @@ func DeleteWorkerHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	if workerid, err = getIDFromURL(r); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(workerid); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = sendWorkerRequest(worker, "delete"); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/worker", http.StatusSeeOther)
@@ -205,25 +205,25 @@ func EditWorkerHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		if workerid, err = strconv.ParseInt(r.PostFormValue("id"), 10, 0); err != nil {
-			httperr(w, err, http.StatusBadRequest)
+			shared.HTTPerr(w, err, http.StatusBadRequest)
 			return
 		}
 		if worker, err = shared.Db.GetWorkerByID(workerid); err != nil {
-			httperr(w, err, http.StatusInternalServerError)
+			shared.HTTPerr(w, err, http.StatusInternalServerError)
 			return
 		}
 		if worker.CityID, err = strconv.ParseInt(r.PostFormValue("city"), 10, 0); err != nil {
-			httperr(w, err, http.StatusBadRequest)
+			shared.HTTPerr(w, err, http.StatusBadRequest)
 			return
 		}
 		if interval, err = strconv.ParseInt(r.PostFormValue("interval"), 10, 0); err != nil {
-			httperr(w, err, http.StatusBadRequest)
+			shared.HTTPerr(w, err, http.StatusBadRequest)
 			return
 		}
 		worker.Interval = int(interval)
 
 		if err = sendWorkerRequest(worker, "edit"); err != nil {
-			httperr(w, err, http.StatusInternalServerError)
+			shared.HTTPerr(w, err, http.StatusInternalServerError)
 			return
 		}
 		http.Redirect(w, r, "/worker", http.StatusSeeOther)
@@ -237,19 +237,19 @@ func EditWorkerHandler(w http.ResponseWriter, r *http.Request) {
 		"html/head.html",
 		"html/menu.html",
 		"html/edit_worker.html"); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if workerid, err = getIDFromURL(r); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(workerid); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = t.Execute(w, getEditContext(worker)); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 }
@@ -261,7 +261,7 @@ func PauseWorkerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != "GET" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
 
@@ -270,15 +270,15 @@ func PauseWorkerHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	if workerid, err = getIDFromURL(r); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(workerid); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = sendWorkerRequest(worker, "pause"); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/worker", http.StatusSeeOther)
@@ -292,7 +292,7 @@ func StartWorkerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != "GET" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
 
@@ -301,15 +301,15 @@ func StartWorkerHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	if workerid, err = getIDFromURL(r); err != nil {
-		httperr(w, err, http.StatusBadRequest)
+		shared.HTTPerr(w, err, http.StatusBadRequest)
 		return
 	}
 	if worker, err = shared.Db.GetWorkerByID(workerid); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if err = sendWorkerRequest(worker, "start"); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/worker", http.StatusSeeOther)

@@ -4,17 +4,23 @@ import (
 	"fmt"
 )
 
+// WeatherPort is a port to weather service
+var WeatherPort = 5001
+
+// WeatherEndpoint point to weather endpoint
+var WeatherEndpoint = fmt.Sprintf("http://weather:%d/weather", WeatherPort)
+
 // WorkerPort is a port to worker service
 var WorkerPort = 5002
 
 // WorkerEndpoint point to worker endpoint
 var WorkerEndpoint = fmt.Sprintf("http://worker:%d/worker/", WorkerPort)
 
-// WeatherPort is a port to weather service
-var WeatherPort = 5001
+// DbPort is a port to db service
+var DbPort = 5003
 
-// WeatherEndpoint point to weather endpoint
-var WeatherEndpoint = fmt.Sprintf("http://weather:%d/weather", WeatherPort)
+// DbEndpoint point to db endpoint
+var DbEndpoint = fmt.Sprintf("http://db:%d", DbPort)
 
 // WorkerRequest describes add worker request
 type WorkerRequest struct {
@@ -32,7 +38,8 @@ type WorkerResponse struct {
 
 // WeatherRequest describes weather service request
 type WeatherRequest struct {
-	CityID int64 `json:"cityid"`
+	WorkerID int64 `json:"workerid"`
+	CityID   int64 `json:"cityid"`
 }
 
 // WeatherResponse describes weather service response

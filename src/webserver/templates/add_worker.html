@@ -1,29 +1,22 @@
-{{ define "menu-form" }}
-{{ if .Cities }}
-<form method="POST" action="/worker/new">
-    <section>
-        <div class="menu-form-left">
-            <label for="city">City</label>
-            <select id="city" name="city">
-                {{ range $k, $v := .Cities }}
-                <option value="{{ $k }}">{{ $v.Name }}</option>
-                {{end}}
-            </select>
+{{ define "menu-left" }}
+    <div id="menu-left">
+        <div style="padding: 10px; display: inline-block;">
+            {{ if .Cities }}
+                <form method="POST" action="/worker/new">
+                    <label for="city">City</label>
+                    <select id="city" name="city">
+                        {{ range $k, $v := .Cities }}
+                            <option value="{{ $k }}">{{ $v.Name }}</option>
+                        {{end}}
+                    </select>
+                    <label for="interval">Interval [sec]</label>
+                    <input id="interval" value="60" name="interval" type="number" min="1" max="86400">
+                    <label for="send"></label>
+                    <input id="send" type="submit" value="Create worker!">
+                </form>
+            {{ else }}
+                <p id="message">You have workes for all cities</p>
+            {{ end }}
         </div>
-    
-        <div class="menu-form-left">
-            <label for="interval">Interval [sec]</label>
-            <input id="interval" value="60" name="interval" type="number" min="1" max="86400">
-        </div>
-        
-        <div class="menu-form-right">
-            <label for="send"></label>
-            <input id="send" type="submit" value="Create worker!">
-        </div>
-    
-        <br style="clear:both;"/>
-    </section>
-</form>
-{{ else }}
-<span id="message">You have workes for all cities</span>
+    </div>
 {{ end }}

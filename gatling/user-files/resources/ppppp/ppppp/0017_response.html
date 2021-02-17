@@ -1,0 +1,110 @@
+<html>
+    
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/ico" href="/resources/favicon.ico"/>
+    <link rel="stylesheet" href="/resources/styles.css">
+    
+<script src="/resources/chartjs/chart.js"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+
+
+    <title>Chart</title>
+</head>
+
+    <body>
+        
+<div id="menu">
+    <div id="title">Projekt programu pobierającego i prezentującego pogodę</div>
+    <div id="submenu">
+        
+    <div id="menu-left">
+        <div style="padding: 10px; display: inline-block;">
+            <a href="/worker">
+                <button class="menu-button">Back</button>
+            </a>
+            <form id="date-form" method="GET" action="/worker/chart">
+                <input type="hidden" id="id" name="id" value="5">
+                <label for="date">Date: </label>
+                <input type="date" id="date" name="date" value="2021-02-17" min="2021-02-17" max="2021-02-17" required>
+                <input id="show" type="submit" value="Show">
+            </form>
+        </div>
+    </div>
+
+        <div id="menu-right">
+            <div style="padding: 10px; display: inline-block;">
+                <a href="/logout">
+                    <button class="menu-button">Logout</button>
+                </a>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+        <div id="content">
+            
+            <div>
+                <canvas id="weather-chart"></canvas>
+            </div>
+            <script>
+                const dateFormat = 'HH:mm:ss';
+                var ctx = document.getElementById('weather-chart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [  moment(new Date(  1613525345  * 1000)).format(dateFormat),  moment(new Date(  1613525725  * 1000)).format(dateFormat),  moment(new Date(  1613526335  * 1000)).format(dateFormat),  moment(new Date(  1613526945  * 1000)).format(dateFormat),  moment(new Date(  1613527555  * 1000)).format(dateFormat),  moment(new Date(  1613528165  * 1000)).format(dateFormat),  moment(new Date(  1613528765  * 1000)).format(dateFormat),  moment(new Date(  1613529375  * 1000)).format(dateFormat),  moment(new Date(  1613529985  * 1000)).format(dateFormat),  moment(new Date(  1613531205  * 1000)).format(dateFormat),  moment(new Date(  1613531815  * 1000)).format(dateFormat),  moment(new Date(  1613532385  * 1000)).format(dateFormat),  moment(new Date(  1613532615  * 1000)).format(dateFormat),  moment(new Date(  1613532625  * 1000)).format(dateFormat),  moment(new Date(  1613532655  * 1000)).format(dateFormat),  moment(new Date(  1613532665  * 1000)).format(dateFormat),  moment(new Date(  1613532675  * 1000)).format(dateFormat),  moment(new Date(  1613532685  * 1000)).format(dateFormat),  moment(new Date(  1613532705  * 1000)).format(dateFormat),  moment(new Date(  1613532715  * 1000)).format(dateFormat),  moment(new Date(  1613532955  * 1000)).format(dateFormat),  moment(new Date(  1613534035  * 1000)).format(dateFormat),  moment(new Date(  1613534645  * 1000)).format(dateFormat),  moment(new Date(  1613535255  * 1000)).format(dateFormat),  moment(new Date(  1613535865  * 1000)).format(dateFormat),  moment(new Date(  1613536226  * 1000)).format(dateFormat),  moment(new Date(  1613536226  * 1000)).format(dateFormat),  moment(new Date(  1613536475  * 1000)).format(dateFormat),  moment(new Date(  1613537045  * 1000)).format(dateFormat),  moment(new Date(  1613537655  * 1000)).format(dateFormat),  moment(new Date(  1613538265  * 1000)).format(dateFormat),  moment(new Date(  1613538875  * 1000)).format(dateFormat),  moment(new Date(  1613539115  * 1000)).format(dateFormat),  moment(new Date(  1613539255  * 1000)).format(dateFormat),  moment(new Date(  1613539865  * 1000)).format(dateFormat),  moment(new Date(  1613540475  * 1000)).format(dateFormat),  moment(new Date(  1613541085  * 1000)).format(dateFormat),  moment(new Date(  1613541695  * 1000)).format(dateFormat),  moment(new Date(  1613542865  * 1000)).format(dateFormat),  moment(new Date(  1613543475  * 1000)).format(dateFormat),  moment(new Date(  1613544085  * 1000)).format(dateFormat),  moment(new Date(  1613544695  * 1000)).format(dateFormat),  moment(new Date(  1613545301  * 1000)).format(dateFormat),  moment(new Date(  1613545911  * 1000)).format(dateFormat),  moment(new Date(  1613546521  * 1000)).format(dateFormat),  moment(new Date(  1613547869  * 1000)).format(dateFormat),  ],
+                        datasets: [{
+                            label: 'Temperature in Sydney [°C]',
+                            data: [   22.45 ,   22.57 ,   23.2 ,   23.12 ,   23.17 ,   23.44 ,   23.32 ,   23.23 ,   23.19 ,   23.31 ,   23.07 ,   22.89 ,   23 ,   22.89 ,   23 ,   22.89 ,   23 ,   22.89 ,   23 ,   22.89 ,   23.16 ,   23.29 ,   23.1 ,   22.62 ,   22.48 ,   22.4 ,   22.48 ,   22.51 ,   22.62 ,   22.32 ,   22.78 ,   22.84 ,   22.83 ,   22.58 ,   22.65 ,   22.59 ,   22.98 ,   22.93 ,   22.62 ,   22.57 ,   22.56 ,   22.39 ,   22.5 ,   22.16 ,   22 ,   21.98 ,  ],
+                            borderWidth: 1,
+                            borderColor: [
+                                'rgba(12, 222, 23, 0.5)',
+                            ],
+                            backgroundColor: [
+                                'rgba(12, 222, 23, 0.5)',
+                            ],
+                        }],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                suggestedMin: -5,
+                                suggestedMax: 5,
+                                gridLines: {
+                                    color: 'rgba(0, 0, 0, 0.3)',
+                                },
+                                ticks: {
+                                    color: '#bdbdbd',
+                                },
+                            },
+                            x: {
+                                gridLines: {
+                                    color: 'rgba(0, 0, 0, 0.3)',
+                                },
+                                ticks: {
+                                    color: '#bdbdbd',
+                                },
+                            },
+                        },
+                        elements: {
+                            point: {
+                                radius: 2,
+                                hoverRadius: 1,
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#bdbdbd',
+                                },
+                            },
+                        },
+                    },
+                });
+            </script>
+            
+        </div>
+    </body>
+</html>

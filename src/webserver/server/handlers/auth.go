@@ -28,15 +28,30 @@ type authContext struct {
 	AuthTitle string
 	Action    string
 	Submit    string
+	Error     string
 }
 
-func getLoginContext() authContext {
+func getLoginContext(err string) authContext {
 	return authContext{
 		Title:     "Login",
 		AuthTitle: "Login",
 		Action:    "/login",
 		Submit:    "Login",
+		Error:     err,
 	}
+}
+
+func loginErr(w http.ResponseWriter, e string) {
+	var err error
+	var t *template.Template
+	w.Header().Set("Content-Type", "text/html")
+	if t, err = template.ParseFiles(
+		"html/auth.html",
+		"html/head.html"); err != nil {
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
+		return
+	}
+	t.Execute(w, getLoginContext(e))
 }
 
 // LoginHandler handles login page
@@ -46,40 +61,40 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == "GET" {
-		var err error
-		var t *template.Template
-
-		w.Header().Set("Content-Type", "text/html")
-		if t, err = template.ParseFiles(
-			"html/auth.html",
-			"html/head.html"); err != nil {
-			httperr(w, err, http.StatusInternalServerError)
-			return
-		}
-		t.Execute(w, getLoginContext())
+		loginErr(w, "")
 		return
 	}
 
-	// POST
-	var user shared.User
 	var err error
+	// POST
+	var exists bool
+	var user shared.User
 
 	username := r.PostFormValue("username")
 	password := []byte(r.PostFormValue("password"))
 
+	if exists, err = shared.Db.DoesUserExists(username); err != nil {
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
+		return
+	}
+	if !exists {
+		loginErr(w, fmt.Sprintf("User %s does not exists!", username))
+		return
+	}
+
 	// authenticate user
 	if user, err = shared.Db.GetUserByName(username); err != nil {
-		httperr(w, err, http.StatusUnauthorized)
+		shared.HTTPerr(w, err, http.StatusUnauthorized)
 		return
 	}
 	if err = bcrypt.CompareHashAndPassword(user.Password, password); err != nil {
-		httperr(w, err, http.StatusUnauthorized)
+		loginErr(w, "Incorrect password!")
 		return
 	}
 
 	// create new session
 	if err = SessionManager.RenewToken(r.Context()); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -94,21 +109,21 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	if r.Method != "POST" {
-		httperr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
+	if r.Method != "GET" {
+		shared.HTTPerr(w, fmt.Errorf("bad HTTP method"), http.StatusBadRequest)
 		return
 	}
-
 	SessionManager.Remove(r.Context(), "userid")
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
-func getSignupContext() authContext {
+func getSignupContext(err string) authContext {
 	return authContext{
 		Title:     "Register",
 		AuthTitle: "Register",
 		Action:    "/signup",
 		Submit:    "Register",
+		Error:     err,
 	}
 }
 
@@ -118,32 +133,49 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/worker", http.StatusSeeOther)
 		return
 	}
-	if r.Method == "GET" {
-		var err error
-		var t *template.Template
 
+	var err error
+	var t *template.Template
+
+	if r.Method == "GET" {
 		w.Header().Set("Content-Type", "text/html")
 		if t, err = template.ParseFiles(
 			"html/auth.html",
 			"html/head.html"); err != nil {
-			httperr(w, err, http.StatusInternalServerError)
+			shared.HTTPerr(w, err, http.StatusInternalServerError)
 			return
 		}
-		t.Execute(w, getSignupContext())
+		t.Execute(w, getSignupContext(""))
 		return
 	}
 
 	// POST
-	var err error
+	var exists bool
 	var user shared.User
 	user.Username = r.PostFormValue("username")
 
+	if exists, err = shared.Db.DoesUserExists(user.Username); err != nil {
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
+		return
+	}
+	if exists {
+		w.Header().Set("Content-Type", "text/html")
+		if t, err = template.ParseFiles(
+			"html/auth.html",
+			"html/head.html"); err != nil {
+			shared.HTTPerr(w, err, http.StatusInternalServerError)
+			return
+		}
+		t.Execute(w, getSignupContext(fmt.Sprintf("User %s already exists!", user.Username)))
+		return
+	}
+
 	if user.Password, err = bcrypt.GenerateFromPassword([]byte(r.PostFormValue("password")), bcrypt.DefaultCost); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 	if _, err = shared.Db.AddUser(user); err != nil {
-		httperr(w, err, http.StatusInternalServerError)
+		shared.HTTPerr(w, err, http.StatusInternalServerError)
 		return
 	}
 

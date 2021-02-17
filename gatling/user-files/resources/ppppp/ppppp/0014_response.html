@@ -1,2 +1,56 @@
-<a href="/worker">See Other</a>.
+<html>
+    
+    
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/ico" href="/resources/favicon.ico"/>
+    <link rel="stylesheet" href="/resources/styles.css">
+    
 
+    <title>Edit Worker</title>
+</head>
+
+    <body>
+        
+<div id="menu">
+    <div id="title">Projekt programu pobierającego i prezentującego pogodę</div>
+    <div id="submenu">
+        
+    <div id="menu-left">
+        <div style="padding: 10px; display: inline-block;">
+            <form method="POST" action="/worker/edit">
+                <input type="hidden" id="id" name="id" value="9">
+                <input type="hidden" id="running" name="running" value="1">
+                <label for="city">City</label>
+                <select id="city" name="city">
+                    
+                        <option value="538560" >Kursk</option>
+                    
+                        <option value="2267057" >Lisbon</option>
+                    
+                        <option value="2643743" >London</option>
+                    
+                        <option value="2878037"  selected >Lichtenstein</option>
+                    
+                </select>
+                <label for="interval">Interval [sec]</label>
+                <input id="interval" name="interval" type="number" value="8"  min="1" max="86400">
+                <label for="send"></label>
+                <input id="send" type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+
+        <div id="menu-right">
+            <div style="padding: 10px; display: inline-block;">
+                <a href="/logout">
+                    <button class="menu-button">Logout</button>
+                </a>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+    </body>
+</html>
